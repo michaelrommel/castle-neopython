@@ -25,7 +25,7 @@ else
 fi
 
 if ! is_mac && [[ ! -d "${HOME}/.oh-my-posh" ]]; then
-	echo "Installing oh-my-posh for zsh"
+	echo "Installing oh-my-posh for bash"
 	mkdir -p "${HOME}/.cache"
 	mkdir -p "${HOME}/.oh-my-posh"
 	export PATH="${HOME}/.oh-my-posh:${PATH}"

@@ -9,7 +9,11 @@ export GPG_TTY
 export EDITOR=vim
 export VISUAL=vim
 export MOSH_ESCAPE_KEY='~'
-export TMUX_VERSION=$(tmux display-message -p \"#{version}\" | sed -e 's/[^0-9.]*\([0-9.]*\)/\1/g')
+
+TMUX=$(/usr/bin/which tmux)
+if [[ -x "${TMUX}" ]]; then
+	export TMUX_VERSION=$(tmux display-message -p \"#{version}\" | sed -e 's/[^0-9.]*\([0-9.]*\)/\1/g')
+fi
 
 [[ -x "/usr/bin/uname" ]] && UNAME="/usr/bin/uname"
 [[ -x "/bin/uname" ]] && UNAME="/bin/uname"

@@ -1,4 +1,4 @@
-#! /usr/bin/env zsh
+#! /usr/bin/env bash
 
 ARCH=$(uname -m)
 OS=$(uname)
