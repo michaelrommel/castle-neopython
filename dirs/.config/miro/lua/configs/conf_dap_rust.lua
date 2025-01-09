@@ -47,6 +47,26 @@ end
 
 M.setup = function()
 	dap.adapters.codelldb = M.get_codelldb_adapter()
+
+	local function get_arguments()
+		local co = coroutine.running()
+		if co then
+			return coroutine.create(function()
+				local args = {}
+				vim.ui.input({ prompt = 'Enter command-line arguments: ' }, function(input)
+					args = vim.split(input, " ")
+				end)
+				coroutine.resume(co, args)
+			end)
+		else
+			local args = {}
+			vim.ui.input({ prompt = 'Enter command-line arguments: ' }, function(input)
+				args = vim.split(input, " ")
+			end)
+			return args
+		end
+	end
+
 	dap.configurations.rust = {
 		{
 			type = "codelldb",
@@ -58,6 +78,7 @@ M.setup = function()
 			cwd = "${workspaceFolder}",
 			stopOnEntry = false,
 			showDisassembly = "never",
+			args = get_arguments,
 		},
 	}
 end

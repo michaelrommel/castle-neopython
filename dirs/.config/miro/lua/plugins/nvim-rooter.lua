@@ -4,6 +4,8 @@ return {
 	lazy = true,
 	event = "BufEnter",
 	opts = {
-		rooter_patterns = { ".git", "pyproject.toml" }
-	}
+		rooter_patterns = { ".git", "pyproject.toml", "package.json", "Cargo.toml" },
+		exclude_filetypes = { "neo-tree" },
+		fallback_to_parent = true,
+	},
 }

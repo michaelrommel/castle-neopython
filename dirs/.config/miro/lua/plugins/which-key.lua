@@ -5,7 +5,7 @@ return {
 	event = "VeryLazy",
 	config = function()
 		require("which-key").setup({
-			window = { border = "rounded" },
+			win = { border = "rounded" },
 		})
 		require("core.mappings").std_mappings()
 	end,

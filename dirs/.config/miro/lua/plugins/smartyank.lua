@@ -26,5 +26,15 @@ return {
 			silent = false, -- true to disable the "n chars copied" echo
 			echo_hl = "Directory", -- highlight group of the OSC52 echo message
 		},
+		-- actions = {
+		-- 	{
+		-- 		cond = function(_)
+		-- 			return true
+		-- 		end,
+		-- 		yank = function(_)
+		-- 			vim.api.nvim_out_write("operator was " .. vim.v.operator .. "\n")
+		-- 		end
+		-- 	}
+		-- }
 	}
 }

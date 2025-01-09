@@ -21,10 +21,10 @@ end
 M.dump = function(t)
 	local conv = {
 		["nil"] = function() return "nil" end,
-		["function"] = function(f) return tostring(f) end,
 		["number"] = function(n) return tostring(n) end,
 		["string"] = function(s) return '"' .. s .. '"' end,
-		["boolean"] = function(b) return tostring(b) end
+		["boolean"] = function(b) return tostring(b) end,
+		["function"] = function(f) return tostring(f) end,
 	}
 	if type(t) == "table" then
 		local s = "{"

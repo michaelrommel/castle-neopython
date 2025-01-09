@@ -1,4 +1,5 @@
 local utf8 = require("core.utils").utf8
+local is_wsl = require("core.utils").is_wsl
 
 local opt = vim.opt
 local g = vim.g
@@ -7,6 +8,18 @@ local g = vim.g
 -- it is the only keymapping we set here, because this needs to be
 -- sourced before the plugin manager
 g.mapleader = " "
+
+-- if in WSL, we set a clipboard provider mainly for calling a script
+-- for pasting from the Windows clipboard. Copying onto it, is done
+-- by the smartyank lua plugin
+if is_wsl then
+	g.clipboard = {
+		name = 'WSLClipboard',
+		copy = { ["+"] = { "clip.exe" }, ["*"] = { "clip.exe" } },
+		paste = { ["+"] = { "nvim_paste.sh" }, ["*"] = { "nvim_paste.sh" } },
+		cache_enabled = true
+	}
+end
 
 -- turn off syntax, as we have treesitter highlighting or
 -- alternatively the lsp semantic tokens
@@ -41,7 +54,7 @@ opt.splitright = true
 opt.splitbelow = true
 opt.equalalways = true
 -- use the clipboard instead of registers
-opt.clipboard = "unnamedplus"
+-- opt.clipboard = "unnamedplus"
 -- keep an undo file
 opt.undofile = true
 -- show autocomplete menu always, do not autoselect an entry and

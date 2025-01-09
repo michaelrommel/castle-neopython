@@ -1,10 +1,14 @@
 -- an installer for language servers and debug adapters
 return {
 	"williamboman/mason.nvim",
-	lazy = true,
-	opts = {
-		ui = {
-			border = "rounded"
-		}
-	}
+	dependencies = {
+	},
+	lazy = false,
+	config = function()
+		require('mason').setup({
+			ui = {
+				border = "rounded"
+			}
+		})
+	end
 }

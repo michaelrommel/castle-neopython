@@ -9,4 +9,4 @@ The fonts have been patched with the font-patcher from Nerd Fonts.
 
 ## Noto Color Emoji
 
-The font ca nbe obtained from https://fonts.google.com/noto/specimen/Noto+Color+Emoji
+The font can be obtained from https://fonts.google.com/noto/specimen/Noto+Color+Emoji
