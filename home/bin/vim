@@ -1,0 +1,12 @@
+#! /bin/bash
+if [[ "$0" =~ "vimdiff" ]]; then
+	OPTS=-d
+fi
+
+if [[ -x "${HOME}/software/neovim/bin/nvim" ]]; then
+	NVIM=${HOME}/software/neovim/bin/nvim
+else
+	NVIM=nvim
+fi
+
+NVIM_APPNAME=miro "${NVIM}" ${OPTS} $*

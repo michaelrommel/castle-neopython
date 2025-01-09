@@ -1,0 +1,21 @@
+{
+  "name": "HappyBirthday",
+  "version": "0.1.0",
+  "description": "Just an example node.js file.",
+  "homepage": "https://github.com/michaelrommel/dotfiles",
+  "private": true,
+  "scripts": {
+    "lint": "eslint"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/michaelrommel/dotfiles"
+  },
+  "dependencies": {
+    "eslint": "^8.36.0",
+    "eslint-config-semistandard": "^17.0.0",
+    "eslint-plugin-import": "^2.27.5",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-promise": "^6.1.1"
+  }
+}
