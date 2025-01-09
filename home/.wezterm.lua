@@ -92,8 +92,8 @@ config.colors = {
 config.treat_east_asian_ambiguous_width_as_wide = false
 config.unicode_version = 9
 -- config.normalize_output_to_unicode_nfc = true
--- config.allow_square_glyphs_to_overflow_width = "Always"
-config.allow_square_glyphs_to_overflow_width = "Never"
+config.allow_square_glyphs_to_overflow_width = "Always"
+-- config.allow_square_glyphs_to_overflow_width = "Never"
 -- this is needed because otherwise box drawing characters can overlap
 -- e.g. when displaying a tree which causes brightness variations
 config.custom_block_glyphs = true
@@ -105,7 +105,7 @@ config.color_scheme = 'Gruvbox Dark Hard'
 config.window_padding = {
 	left = 0,
 	right = 0,
-	top = 0,
+	top = 3,
 	bottom = 0,
 }
 

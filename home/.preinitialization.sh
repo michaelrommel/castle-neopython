@@ -10,21 +10,31 @@ export EDITOR=vim
 export VISUAL=vim
 export MOSH_ESCAPE_KEY='~'
 
-TMUX=$(/usr/bin/which tmux)
-if [[ -x "${TMUX}" ]]; then
-	export TMUX_VERSION=$(tmux 2>/dev/null display-message -p \"#{version}\" | sed -e 's/[^0-9.]*\([0-9.]*\)/\1/g')
-fi
-
 [[ -x "/usr/bin/uname" ]] && UNAME="/usr/bin/uname"
 [[ -x "/bin/uname" ]] && UNAME="/bin/uname"
 
 OSNAME=$("${UNAME}" -s)
 OSRELEASE=$("${UNAME}" -r)
+export OSNAME OSRELEASE
 
 # LC_ALL would override all settings, do not set that
 # LC_LANG is setting the default. It is set in /etc/default/locale
 if [[ "${OSNAME}" != "Darwin" ]]; then
 	export LC_COLLATE="C.UTF-8"
+fi
+
+if TMUX_VERS_BIN=$(tmux 2>/dev/null -V); then
+	# get the correct tmux version, even if no server is running yet
+	if TMUX_VERS_SERVER=$(tmux 2>/dev/null display-message -p "#{version}"); then
+		# we got the server version, use this
+		# shellcheck disable=SC2001
+		TMUX_VERSION=$(echo "${TMUX_VERS_SERVER}" | sed -e 's/[^0-9.]*\([0-9.]*\)/\1/g')
+	else
+		# use the client version
+		# shellcheck disable=SC2001
+		TMUX_VERSION=$(echo "${TMUX_VERS_BIN}" | sed -e 's/[^0-9.]*\([0-9.]*\)/\1/g')
+	fi
+	export TMUX_VERSION
 fi
 
 # load authentication tokens
@@ -38,16 +48,9 @@ fi
 # [[ "${TERMINAL}" == "linux" ]] && "${HOME}/bin/set_gruvbox_colors.sh"
 # unset TERMINAL
 
-# adjust gruvbos colors
-if [[ "${OSNAME}" == "Darwin" ]]; then
-	# shellcheck source=/Users/rommel/.vim/plugged/gruvbox/gruvbox_256palette_osx.sh
-	[[ -s "${HOME}/.vim/plugged/gruvbox/gruvbox_256palette_osx.sh" ]] &&
-		\. "${HOME}/.vim/plugged/gruvbox/gruvbox_256palette_osx.sh"
-else
-	# shellcheck source=/home/rommel/.vim/plugged/gruvbox/gruvbox_256palette.sh
-	[[ -s "${HOME}/.vim/plugged/gruvbox/gruvbox_256palette.sh" ]] &&
-		\. "${HOME}/.vim/plugged/gruvbox/gruvbox_256palette.sh"
-fi
+# adjust gruvbos colors for 256 color terminals
+# shellcheck source=/home/rommel/bin/set_gruvbox_colors.sh
+[[ -s "${HOME}/bin/set_gruvbox_colors.sh" ]] && "${HOME}/bin/set_gruvbox_colors.sh"
 
 # color for less and man
 export MANPAGER='less -r -s -M +Gg'
@@ -124,25 +127,3 @@ set -o vi
 
 # reset initialization lines (formatting and clear line, cursor to 1st col
 echo -n -e '\e[1G\e[2K\e[0m'
-
-# show MOTD once per day
-if [[ "${OSNAME}" == "Darwin" ]]; then
-	LEAVEDATE=$(date -j -f "%Y-%m-%d %H:%M:%S" "2026-10-01 00:00:00" +%s)
-	BEGINOFDAY=$(date -j -v0H -v0M -v0S +%s)
-	NOW=$(date -j +%s)
-else
-	LEAVEDATE=$(date -d "2026-10-01" +"%s")
-	BEGINOFDAYSTRING=$(date +"%Y-%m-%d 00:00:00")
-	BEGINOFDAY=$(date -d "${BEGINOFDAYSTRING}" +"%s")
-	NOW=$(date +"%s")
-fi
-[[ -f ${HOME}/.motd_shown ]] && MOTDSHOWN=$(<"${HOME}/.motd_shown")
-MOTDSHOWN=${MOTDSHOWN:-0}
-DIFF=$((NOW - MOTDSHOWN))
-if [[ ${DIFF} -gt 86400 ]]; then
-	# calculat
-	echo "${BEGINOFDAY}" >"${HOME}/.motd_shown"
-	# Count down the days of working for others
-	WEEKSLEFT=$(((LEAVEDATE - NOW) / (7 * 24 * 3600)))
-	echo -e "Weeks to work: \e[94m${WEEKSLEFT}\e[0m"
-fi

@@ -44,6 +44,9 @@ dnotify() {
 		printf "\x1b\x1b]99;i=1:d=1:p=body;%s\x1b\x1b\\" "${body}"
 	fi
 }
+if [[ "${OSNAME}" == "Linux" && "${OSRELEASE}" =~ "-microsoft-" ]]; then
+	alias open="explorer.exe"
+fi
 
 # load company / work specific aliases
 # shellcheck source=./.company_aliases.sh
