@@ -3,8 +3,8 @@ return {
 	"williamboman/mason-lspconfig.nvim",
 	lazy = true,
 	ft = {
-		"sh", "bash", "zsh", "css", "graphql", "html", "json", "json5", "lua",
-		"python", "rust", "svelte", "javascript"
+		"sh", "bash", "zsh", "json", "json5", "lua",
+		"python"
 	},
 	dependencies = {
 		"williamboman/mason.nvim",
@@ -23,8 +23,7 @@ return {
 			-- This setting has no relation with the `automatic_installation` setting.
 			-- The Mason tools, which are not language servers should be in mason-tool-installer
 			ensure_installed = {
-				"bashls", "cssls", "eslint", "graphql", "html", "jedi_language_server", "jsonls", "lua_ls",
-				"rust_analyzer", "svelte", "tailwindcss", "tsserver",
+				"bashls", "jedi_language_server", "jsonls", "lua_ls", "ts_ls",
 			},
 
 			-- Whether servers that are set up (via lspconfig) should be automatically installed if they're not already installed.
@@ -107,37 +106,11 @@ return {
 					},
 				})
 			end,
-			["cssls"] = function()
-				require("lspconfig").cssls.setup({
-					on_attach = on_attach,
-					capabilities = capabilities,
-					filetypes = { "css" },
-					settings = {
-						css = {
-							-- customData = {
-							-- 	"/tmp/tailwind.css-data.json"
-							-- },
-							lint = {
-								unknownAtRules = 'ignore'
-							}
-						}
-					}
-				})
-			end,
 			["bashls"] = function()
 				require("lspconfig").bashls.setup({
 					on_attach = on_attach,
 					capabilities = capabilities,
 					filetypes = { "sh", "bash", "zsh" },
-				})
-			end,
-			["eslint"] = function()
-				require("lspconfig").eslint.setup({
-					on_attach = on_attach,
-					capabilities = capabilities,
-					root_dir = require("lspconfig/util").root_pattern(
-						"package.json", "eslint.config.*"
-					),
 				})
 			end,
 			["lua_ls"] = function()
@@ -158,47 +131,6 @@ return {
 					}
 				})
 			end,
-			["rust_analyzer"] = function()
-				require("lspconfig").rust_analyzer.setup({
-					on_attach = on_attach,
-					capabilities = capabilities,
-					filetypes = { "rust" },
-					root_dir = require("lspconfig/util").root_pattern(
-						"Cargo.toml", "rust-project.json"
-					),
-					single_file_support = true,
-					settings = {
-						['rust-analyzer'] = {
-							diagnostics = {
-								enable = true,
-							},
-							cargo = {
-								allFeatures = true,
-								buildScripts = {
-									enable = true,
-								}
-							},
-							checkOnSave = {
-								allFeatures = true,
-								overrideCommand = {
-									'cargo', 'clippy', '--workspace', '--message-format=json',
-									'--all-targets', '--all-features'
-								}
-							},
-						}
-					}
-				})
-			end,
-			-- ["pyright"] = function()
-			-- 	require("lspconfig").pyright.setup({
-			-- 		on_attach = on_attach,
-			-- 		capabilities = capabilities,
-			-- 		filetypes = { "python" },
-			-- 		handlers = {
-			-- 			["textDocument/signatureHelp"] = vim.lsp.with(vim.lsp.handlers.signature_help),
-			-- 		}
-			-- 	})
-			-- end,
 		}
 	end
 }

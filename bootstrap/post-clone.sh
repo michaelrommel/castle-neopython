@@ -126,7 +126,7 @@ make install
 
 if ! rustup -V >/dev/null 2>&1; then
 	echo "Installing rust"
-	mise plugin install rust
+	# mise plugin install rust
 	mise install rust@latest
 	mise use -g rust@latest
 	# install shell completions

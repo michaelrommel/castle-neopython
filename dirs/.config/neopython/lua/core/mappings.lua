@@ -9,18 +9,8 @@ end
 
 M.std_mappings = function()
 	local wk = require("which-key")
-	local ts = require("telescope")
-	local tb = require("telescope.builtin")
-	local tsc = require("configs.conf_telescope")
 	local tc = require("todo-comments")
-	local flsh = require("flash")
 
-	local ttc = require("configs.conf_toggleterm")
-	local term = require('toggleterm.terminal').Terminal
-	local miniterm = term:new(ttc.miniterm_opts)
-	local function miniterm_toggle()
-		miniterm:toggle()
-	end
 	local function neotree_toggle()
 		local reveal_file = vim.fn.expand('%:p')
 		if (reveal_file == '') then
@@ -57,7 +47,6 @@ M.std_mappings = function()
 		-- ['kj'] = { "<Esc>", "Alternative Escape" },
 	})
 	wk.add({
-		{ "<C-c>", function() miniterm_toggle() end,   desc = "Toggle Mini Terminal" },
 		-- jumps to splits
 		{ "<C-h>", "<C-w>h",                           desc = "Left split" },
 		{ "<C-j>", "<C-w>j",                           desc = "Lower split" },
@@ -69,54 +58,14 @@ M.std_mappings = function()
 		{ "gc",    "<plug>(comment_toggle_linewise)",  desc = "Comment toggle linewise" },
 	})
 	wk.add({
-		-- ['/'] = { function() flsh.jump() end, "Search with flash" },
-		-- x = visual mode only, o = operator pending mode
-		{ "S", function() flsh.treesitter() end, desc = "Search Treesitter tags with flash", mode = { "n", "x" } },
-	})
-	wk.add({
-		-- ['kj'] = { "<C-\\><C-n>", "Put terminal in Normal mode" },
-		{ "<C-q>", "<C-\\><C-n>", desc = "Put terminal in Normal mode", mode = "t" },
-	})
-	wk.add({
-		mode = { "v" },
-		{ "<leader>s",  group = "Silicon" },
-		{ "<leader>sc", function() require("nvim-silicon").clip() end,  desc = "Copy code screenshot to clipboard" },
-		{ "<leader>sf", function() require("nvim-silicon").file() end,  desc = "Save code screenshot as file" },
-		{ "<leader>ss", function() require("nvim-silicon").shoot() end, desc = "Create code screenshot" },
-	})
-	wk.add({
 		{ "<leader>H",  function() vim.diagnostic.hide() end,                    desc = "Hide diagnostics" },
 		{ "<leader>b",  group = "Browse" },
 		{ "<leader>bd", function() require("browse.devdocs").search() end,       desc = "DevDocs" },
 		{ "<leader>bg", function() require("browse.devdocs").input_search() end, desc = "Google" },
 		-- opens up the tree
 		{ "<leader>e",  neotree_toggle,                                          desc = "Open explorer tree" },
-		-- ['e'] = { function() require("nvim-tree.api").tree.focus() end, "Open explorer tree" },
-		-- find functions with telescope
-		{ "<leader>f",  group = "Find" },
-		{ "<leader>fb", function() tb.buffers() end,                             desc = "Find buffers" },
-		{ "<leader>fc", function() ts.extensions.neoclip.default() end,          desc = "Find clipboard" },
-		{ "<leader>fd", function() tb.diagnostics() end,                         desc = "Find diagnostics" },
-		{
-			"<leader>ff",
-			function()
-				tb.find_files({
-					find_command =
-					{ 'rg', '--files', '--hidden', '-g', '!.git' }
-				})
-			end,
-			desc = "Find files"
-		},
-		{ "<leader>fg", function() tb.live_grep() end,                         desc = "Live grep" },
-		{ "<leader>fp", function() tsc.find_files_from_project_git_root() end, desc = "Find files in project" },
 		-- clears search highlighting
-		{ "<leader>h",  "<cmd>nohl<cr>",                                       desc = "Hide search highlights" },
-		{ "<leader>s",  group = "Silicon" },
-		{ "<leader>sc", function() require("nvim-silicon").shoot() end,        desc = "Put code screenshot to clipboard" },
-		{ "<leader>sf", function() require("nvim-silicon").file() end,         desc = "Put code screenshot to file" },
-		{ "<leader>ss", function() require("nvim-silicon").clip() end,         desc = "Create code screenshot" },
-		-- zen mode
-		{ "<leader>z",  function() require("zen-mode").toggle() end,           desc = "Toggle zen mode" },
+		{ "<leader>h",  "<cmd>nohl<cr>",                                         desc = "Hide search highlights" },
 	})
 end
 
@@ -242,90 +191,6 @@ M.cmp_mappings = function()
 	}
 end
 
-M.dap_mappings = function()
-	-- the debug adapter protocol can open modal floating windows, this mapping allows
-	-- the Esc key to close them
-	vim.api.nvim_create_autocmd("FileType", {
-		pattern = "dap-float",
-		callback = function()
-			vim.keymap.set('n', '<Esc>', "<cmd>close!<CR>", { buffer = true, noremap = true, silent = true })
-		end
-	})
-	local wk = require("which-key")
-	-- standard key mappings
-	wk.add({
-		-- step into the function: mnemonic debug in
-		{ "<C-S-i>", function() require('dap').step_into() end, desc = "Step Into" },
-		-- step over the function: mnemonic debug jump over
-		{ "<C-S-j>", function() require('dap').step_over() end, desc = "Step Over" },
-		-- terminate debugging session: mnemonic kill debugger
-		{ "<C-S-k>", function() require('dap').terminate() end, desc = "Kill/Stop Debugger" },
-		-- step out to the calling function: mnemonic out
-		{ "<C-S-o>", function() require('dap').step_out() end,  desc = "Step Out" },
-		-- start debugging: mnemonic play
-		{ "<C-S-p>", function() require('dap').continue() end,  desc = "Play" },
-	})
-	-- document the leader key mappings
-	wk.add({
-		{ "<Leader>d",  group = "Debug" },
-		-- set a breakpoint
-		{ "<Leader>dB", function() require('dap').set_breakpoint() end,    desc = "Breakpoint Set" },
-		-- re-start the debug session: mnemonic debug again
-		{ "<Leader>da", function() require('dap').run_last() end,          desc = "Again the last run" },
-		-- toggle a breakpoint: mnemonic debug breakpoint
-		{ "<Leader>db", function() require('dap').toggle_breakpoint() end, desc = "Breakpoint Toggle" },
-		-- continue the debugging: mnemonic debug continue
-		{ "<Leader>dc", function() require('dap').continue() end,          desc = "Continue" },
-		-- show the stack frames, can navigate around the call stack: mnemonic debug frames
-		{
-			"<Leader>df",
-			function()
-				local widgets = require('dap.ui.widgets')
-				widgets.centered_float(widgets.frames)
-			end,
-			desc = "Frames on the stack"
-		},
-		-- show variable or function status inspector: mnemonic debug hover
-		{ "<Leader>dh", function() require('dap.ui.widgets').hover() end,                                        desc = "Hover" },
-		-- set a log point: mnemonic debug logmessage
-		{ "<Leader>dl", function() require('dap').set_breakpoint(nil, nil, fn.input('Log point message: ')) end, desc = "Log Point" },
-		-- open a repl, switch to insert mode for a prompt: mnemonic debug open
-		{ "<Leader>do", function() require('dap').repl.open() end,                                               desc = "Open REPL" },
-		-- show variables or function status inspector in a separate split: mnemonic debug preview
-		{ "<Leader>dp", function() require('dap.ui.widgets').preview() end,                                      desc = "Preview" },
-		-- start the debugging: mnemonic debug run
-		{
-			"<Leader>dr",
-			function()
-				if vim.bo.filetype == "javascript" then
-					local addr = fn.input("Host: ", "127.0.0.1")
-					require("dap").configurations["javascript"][2]["address"] = addr
-				end
-				require('dap').continue()
-			end,
-			desc = "Run"
-		},
-		-- show the variables in all scopes: mnemonic debug scopes
-		{
-			"<Leader>ds",
-			function()
-				local widgets = require('dap.ui.widgets')
-				widgets.centered_float(widgets.scopes)
-			end,
-			desc = "Scopes"
-		},
-		-- show the whole debugging ui: mnemonic debug ui
-		{
-			"<Leader>du",
-			function()
-				-- require('dapui').setup()
-				require('dapui').toggle()
-			end,
-			desc = "UI display"
-		},
-	})
-end
-
 M.lsp_mappings = function(bufnr)
 	local wk = require("which-key")
 	local function show_documentation()
@@ -371,29 +236,6 @@ M.lsp_mappings = function(bufnr)
 			remap = false
 		},
 		{ "<leader>wr", lsp.buf.remove_workspace_folder, buffer = bufnr, desc = "Remove workspace folder", remap = false },
-	})
-end
-
-M.crates_mappings = function(bufnr)
-	local wk = require("which-key")
-	local crates = require("crates")
-	wk.add({
-		{ "<leader>c",  group = "Crates",                          remap = false },
-		{ "<leader>cA", crates.upgrade_all_crates,                 buffer = bufnr, desc = "Crates.io",          remap = false },
-		{ "<leader>cC", crates.open_crates_io,                     buffer = bufnr, desc = "Crates.io",          remap = false },
-		{ "<leader>cD", crates.open_documentation,                 buffer = bufnr, desc = "Documentation",      remap = false },
-		{ "<leader>cE", crates.extract_crate_into_table,           buffer = bufnr, desc = "Extract into table", remap = false },
-		{ "<leader>cH", crates.open_homepage,                      buffer = bufnr, desc = "Homepage",           remap = false },
-		{ "<leader>cR", crates.open_repository,                    buffer = bufnr, desc = "Repository",         remap = false },
-		{ "<leader>cU", crates.upgrade_crate,                      buffer = bufnr, desc = "Upgrade crate",      remap = false },
-		{ "<leader>ca", crates.update_all_crates,                  buffer = bufnr, desc = "Update all crates",  remap = false },
-		{ "<leader>cd", crates.show_dependencies_popup,            buffer = bufnr, desc = "Dependencies",       remap = false },
-		{ "<leader>ce", crates.expand_plain_crate_to_inline_table, buffer = bufnr, desc = "Expand to table",    remap = false },
-		{ "<leader>cf", crates.show_features_popup,                buffer = bufnr, desc = "Features",           remap = false },
-		{ "<leader>cr", crates.reload,                             buffer = bufnr, desc = "Reload",             remap = false },
-		{ "<leader>ct", crates.toggle,                             buffer = bufnr, desc = "Toggle",             remap = false },
-		{ "<leader>cu", crates.update_crate,                       buffer = bufnr, desc = "Update crate",       remap = false },
-		{ "<leader>cv", crates.show_versions_popup,                buffer = bufnr, desc = "Versions",           remap = false },
 	})
 end
 
