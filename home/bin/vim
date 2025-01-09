@@ -9,4 +9,4 @@ else
 	NVIM=nvim
 fi
 
-NVIM_APPNAME=miro "${NVIM}" ${OPTS} $*
+NVIM_APPNAME=neopython "${NVIM}" ${OPTS} $*
