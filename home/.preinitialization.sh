@@ -12,7 +12,7 @@ export MOSH_ESCAPE_KEY='~'
 
 TMUX=$(/usr/bin/which tmux)
 if [[ -x "${TMUX}" ]]; then
-	export TMUX_VERSION=$(tmux display-message -p \"#{version}\" | sed -e 's/[^0-9.]*\([0-9.]*\)/\1/g')
+	export TMUX_VERSION=$(tmux 2>/dev/null display-message -p \"#{version}\" | sed -e 's/[^0-9.]*\([0-9.]*\)/\1/g')
 fi
 
 [[ -x "/usr/bin/uname" ]] && UNAME="/usr/bin/uname"
