@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 echo -e '\e[1mbold\e[22m'
 echo -e '\e[2mdim\e[22m'
@@ -34,4 +34,3 @@ echo -e '\e[4m\e[58:5:42m256-color underline (new in 0.52)\e[59m\e[24m'
 echo -e '\e[21m\e[58:5:42m256-color double underline (new in 0.52)\e[59m\e[24m'
 echo -e '\e[4:3m\e[58:2::240:143:104mtruecolor underline (new in 0.52)\e[59m\e[4:0m'
 echo -n -e '\e[0m'
-
