@@ -10,4 +10,4 @@ else
 fi
 
 # shellcheck disable=SC2086,SC2048
-NVIM_APPNAME=miro exec "${NVIM}" ${OPTS} $*
+NVIM_APPNAME=neopython exec "${NVIM}" ${OPTS} $*
