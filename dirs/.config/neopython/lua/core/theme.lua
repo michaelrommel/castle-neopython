@@ -54,14 +54,4 @@ M.icons = {
 	TypeParameter = ""
 }
 
-M.base46 = {
-	theme = "gatekeeper", -- default theme
-	hl_add = {},
-	hl_override = {},
-	integrations = {},
-	changed_themes = {},
-	transparency = false,
-	-- theme_toggle = { "onedark", "one_light" },
-}
-
 return M

@@ -19,6 +19,10 @@ vim.opt.rtp:prepend(lazypath)
 
 -- load theme icons
 require("core.theme")
+-- nvchad (method 2, for non lazyloaders) to load all highlights at once
+for _, v in ipairs(vim.fn.readdir(vim.g.base46_cache)) do
+	dofile(vim.g.base46_cache .. v)
+end
 
 -- lazy load now all plugins
 local lazyopts = require("configs.conf_lazy").opts
