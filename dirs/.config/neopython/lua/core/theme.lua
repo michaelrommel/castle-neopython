@@ -10,8 +10,8 @@ fn.sign_define("DiagnosticSignInfo", { text = utf8(0xf7fc), texthl = "Diagnostic
 fn.sign_define("DiagnosticSignHint", { text = utf8(0xf835), texthl = "DiagnosticSignHint" })
 
 -- Diagnostic popup
-vim.cmd [[autocmd! ColorScheme * highlight NormalFloat guibg=#1d2021]]
-vim.cmd [[autocmd! ColorScheme * highlight FloatBorder guifg=white guibg=#1d2021]]
+-- vim.cmd [[autocmd! ColorScheme * highlight NormalFloat guibg=#1d2021]]
+-- vim.cmd [[autocmd! ColorScheme * highlight FloatBorder guifg=white guibg=#1d2021]]
 -- vim.cmd([[highlight link FloatBorder NormalFloat]])
 
 -- disable semantic token highlights from the language servers
@@ -52,6 +52,16 @@ M.icons = {
 	Event = "",
 	Operator = "",
 	TypeParameter = ""
+}
+
+M.base46 = {
+	theme = "gatekeeper", -- default theme
+	hl_add = {},
+	hl_override = {},
+	integrations = {},
+	changed_themes = {},
+	transparency = false,
+	-- theme_toggle = { "onedark", "one_light" },
 }
 
 return M
